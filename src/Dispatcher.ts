@@ -277,11 +277,22 @@ export class ActionDispatcher<S extends z.AnyZodObject, T extends z.infer<S>, O 
         }
     }
 
-    async start () {
+    async startQueue () {
         await this.bullQueue!.resume();
+    }
+
+    async pauseQueue () {
+        await this.bullQueue!.pause();
+    }
+
+    async start () {
         // We can't await the .run() as it freezes.
         this.bullWorker!.run();
         this.bullWorker!.resume();
+    }
+
+    async pause () {
+        this.bullWorker!.pause();
     }
 
     #formatJobOptions (options: z.input<typeof AddJobOptionsSchema>): BullJobsOptions {
